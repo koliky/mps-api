@@ -11,5 +11,6 @@ public interface AppUserRepository {
     AppUser findByEmployeeId(String employeeId);
     AppUser save(AppUser appUser);
     AppUser update(AppUser appUser);
-    List<AppUser> findAllLimit(int start, int limit);
+    List<AppUser> searchUsers(String text);
+    List<AppUser> searchUsersLimit(String text, int start, int limit);
 }

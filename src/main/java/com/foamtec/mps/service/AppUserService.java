@@ -37,7 +37,11 @@ public class AppUserService {
         return appUserRepository.findByEmployeeId(employeeId);
     }
 
-    public List<AppUser> findAllLimit(int start, int limit) {
-        return appUserRepository.findAllLimit(start, limit);
+    public List<AppUser> searchUsers(String text) {
+        return appUserRepository.searchUsers(text);
+    }
+
+    public List<AppUser> searchUsersLimit(String text, int start, int limit) {
+        return appUserRepository.searchUsersLimit(text, start, limit);
     }
 }
