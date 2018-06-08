@@ -56,8 +56,27 @@ public class AppUserRepositoryImpl implements AppUserRepository {
         return appUser;
     }
 
-    public List<AppUser> findAllLimit(int start, int limit) {
-        Query query = entityManager.createQuery("SELECT a FROM AppUser a");
+    @Override
+    public List<AppUser> searchUsers(String text) {
+        String searchText = "%";
+        if(text.length() > 0) {
+            searchText = "%" + text + "%";
+        }
+        Query query = entityManager.createQuery("SELECT a FROM AppUser a WHERE a.firstName LIKE :text OR " +
+                "a.lastName LIKE :text OR a.department LIKE :text OR a.employeeId LIKE :text");
+        query.setParameter("text", searchText);
+        return query.getResultList();
+    }
+
+    @Override
+    public List<AppUser> searchUsersLimit(String text, int start, int limit) {
+        String searchText = "%";
+        if(text.length() > 0) {
+            searchText = "%" + text + "%";
+        }
+        Query query = entityManager.createQuery("SELECT a FROM AppUser a WHERE a.firstName LIKE :text OR " +
+                "a.lastName LIKE :text OR a.department LIKE :text OR a.employeeId LIKE :text");
+        query.setParameter("text", searchText);
         query.setMaxResults(limit);
         query.setFirstResult(start);
         return query.getResultList();

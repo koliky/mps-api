@@ -128,16 +128,17 @@ public class AdminController {
         }
     }
 
-    @RequestMapping(value = "/finduserlimit", method = RequestMethod.GET, headers = "Content-Type=Application/json")
-    public ResponseEntity<String> findUsersLimit(@RequestParam(value = "start", required = true) Integer start,
+    @RequestMapping(value = "/searchuserslimit", method = RequestMethod.GET, headers = "Content-Type=Application/json")
+    public ResponseEntity<String> searchUsersLimit(@RequestParam(value = "start", required = true) Integer start,
                                                  @RequestParam(value = "limit", required = true) Integer limit,
+                                                 @RequestParam(value = "searchText", required = true) String searchText,
                                                  HttpServletRequest request) throws ServletException {
         Claims claims = securityService.checkToken(request);
         if (securityService.checkRoleAdmin(claims)) {
             throw new ServletException("Invalid role");
         }
-        int totalUser = appUserService.findAll().size();
-        List<AppUser> appUsers = appUserService.findAllLimit(start, limit);
+        int totalUser = appUserService.searchUsers(searchText).size();
+        List<AppUser> appUsers = appUserService.searchUsersLimit(searchText, start, limit);
         JSONObject jsonObject = new JSONObject();
         try {
             int i = start;

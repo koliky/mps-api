@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @RestController
@@ -74,7 +76,11 @@ public class LoginController {
             if(code.indexOf("pppassword") < 0) {
                 throw new ServletException("code invalid");
             }
-            for(int i = 1; i <= 63; i++) {
+            Date date = new Date();
+            DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+            System.out.println(sdf.format(date));
+            for(int i = 1; i <= 120000; i++) {
+                System.out.println(i);
                 AppUser appUser = new AppUser();
                 appUser.setCreateDate(new Date());
                 appUser.setEmployeeId("00000" + i);
@@ -85,16 +91,25 @@ public class LoginController {
                 appUser.setUsername("admin" + i);
                 appUser.setTelephone("814");
                 appUser.setEmail("apichate@foamtecintl.com");
-                appUser.setPassword(securityService.hasPassword("adminpassword"));
+                appUser.setPassword("adminpassword");
+//                appUser.setPassword(securityService.hasPassword("adminpassword"));
                 appUser.setRole("Admin");
                 appUserService.save(appUser);
             }
-
+            System.out.println("START = " + sdf.format(date));
+            System.out.println("END = " + sdf.format(new Date()));
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("message", "created");
             return new ResponseEntity<>(jsonObject.toString(), securityService.getHeader(), HttpStatus.OK);
         } catch (Exception e) {
             throw new ServletException(e);
         }
+    }
+
+    @RequestMapping(value = "/checkapionline", method = RequestMethod.GET)
+    public ResponseEntity<String> checkApiOnline() {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("message", "online");
+        return new ResponseEntity<>(jsonObject.toString(), securityService.getHeader(), HttpStatus.OK);
     }
 }
